@@ -22,4 +22,6 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/tala-hudhud/book-shop-docker.git
-cd book_shop/book-shop
+cd book-shop-docker
+cp .env.example .env
+docker-compose up --build
