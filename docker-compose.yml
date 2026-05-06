@@ -1,0 +1,44 @@
+services:
+    db:
+        image: postgres:15
+        container_name: db
+        env_file:
+          - .env
+        volumes:
+          - postgres_data:/var/lib/postgresql/data
+        networks:
+          - bookshop_network
+
+    backend:
+        build: .
+        container_name: backend
+        env_file:
+          - .env
+        depends_on:
+          - db
+        expose:
+          - "8000"
+        volumes:
+          - static_data:/app/staticfiles
+        networks:
+          - bookshop_network
+
+    nginx:
+      build: ./nginx
+      container_name: nginx
+      ports:
+        - "80:80"
+      volumes:
+        - static_data:/staticfiles
+      depends_on:
+        - backend
+      networks:
+        - bookshop_network
+
+volumes:
+    postgres_data:
+    static_data:
+
+networks:
+    bookshop_network:
+        driver: bridge
